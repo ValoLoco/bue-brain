@@ -2,27 +2,13 @@
 
 A clean, reusable template for a multi-agent Hermes brain architecture. Designed for Codespaces with dev container support.
 
-## Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      ~/Brains/                              │
-├─────────────────────┬───────────────────────────┬───────────┤
-│   personal/         │     companies/            │ projects/ │
-│   (global context)  │     (shared org brains)   │ (focused) │
-└─────────────────────┴───────────────────────────┴───────────┘
-                              │
-                    ┌─────────┴─────────┐
-                    │  Hermes Profiles  │
-                    │  (agent minds)    │
-                    └───────────────────┘
-```
-
-## Quick Start
+## 🚀 Quick Start
 
 ### Option 1: GitHub Codespaces (Recommended)
 
-1. Click **Code → Codespaces → Create codespace on main**
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ValoLoco/bue-brain)
+
+1. Click the button above to open in Codespaces
 2. Wait for dev container to build (~5 minutes)
 3. Run the setup sequence:
    ```bash
@@ -73,6 +59,22 @@ export NVIDIA_API_KEY_CONTINGENCY=your-contingency-key
 # Start working
 hermes -p personal chat
 hermes -p example-company-ceo chat
+```
+
+## Architecture Overview
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      ~/Brains/                              │
+├─────────────────────┬───────────────────────────┬───────────┤
+│   personal/         │     companies/            │ projects/ │
+│   (global context)  │     (shared org brains)   │ (focused) │
+└─────────────────────┴───────────────────────────┴───────────┘
+                              │
+                    ┌─────────┴─────────┐
+                    │  Hermes Profiles  │
+                    │  (agent minds)    │
+                    └───────────────────┘
 ```
 
 ## What's Included
