@@ -51,20 +51,26 @@ new_company_brain() {
   cat > "$root/AGENTS.md" <<EOF
 # ${name} C-Suite Guardrails
 
+## Boundary rules (critical)
+- **Directory boundary:** Only read and write within this brain directory (\`$root/\`). Never access files outside this directory.
+- **Cross-brain isolation:** Never read or write to other company/project brains. Route via personal brain if cross-brain context is needed.
+- **Raw immutability:** Treat \`raw/\` as immutable source material. Never overwrite, delete, or modify raw captures.
+- **Wiki protection:** Never write directly to \`wiki/\`. Promote from \`outputs/\` only after human review.
+
 ## Shared rules
 - Read INDEX.md and relevant context before substantive work.
-- Treat raw/ as source material; do not overwrite it.
-- Draft in outputs/ and promote only after human review.
-- Record material decisions with rationale in decisions/.
+- Draft in \`outputs/\` and promote only after human review.
+- Record material decisions with rationale in \`decisions/\`.
+- Mark drafts clearly with status headers (e.g., \`## Status: Draft | Review | Approved\`).
 - Escalate cross-functional conflicts and irreversible actions to the CEO/human owner.
 
 ## Roles
-- CEO: strategy, priorities, major decisions; outputs/strategy/ and decisions/.
-- COO: operations, SOPs, delivery; operations/ and outputs/operations/.
-- CFO: finance, pricing, unit economics; finance/ and outputs/finance/.
-- CMO: positioning, content, campaigns; marketing/ and outputs/marketing/.
-- CTO: systems, automation, technical architecture; technology/ and outputs/technology/.
-- COS: triage, coordination, sequencing; outputs/coordination/.
+- CEO: strategy, priorities, major decisions; \`outputs/strategy/\` and \`decisions/\`.
+- COO: operations, SOPs, delivery; \`operations/\` and \`outputs/operations/\`.
+- CFO: finance, pricing, unit economics; \`finance/\` and \`outputs/finance/\`.
+- CMO: positioning, content, campaigns; \`marketing/\` and \`outputs/marketing/\`.
+- CTO: systems, automation, technical architecture; \`technology/\` and \`outputs/technology/\`.
+- COS: triage, coordination, sequencing; \`outputs/coordination/\`.
 EOF
 
   cat > "$root/operations/CONTEXT.md" <<EOF
@@ -100,9 +106,18 @@ brain: ~/Brains/companies/${slug}
 model: nvidia/llama-3.1-70b-instruct
 system_prompt: |
   You are the ${role^^} for ${name}.
-  Read AGENTS.md, INDEX.md, and relevant context before substantive work.
-  Respect the role boundaries and output locations in AGENTS.md.
-  Draft in outputs/; never present drafts as approved facts or decisions.
+  
+  ## Boundaries (critical)
+  - Only read and write within this brain directory. Never access files outside this directory.
+  - Never read or write to other company/project brains.
+  - Never write directly to wiki/. Promote from outputs/ only after human review.
+  - Treat raw/ as immutable; never overwrite source captures.
+  
+  ## Operating rules
+  - Read AGENTS.md, INDEX.md, and relevant context before substantive work.
+  - Respect the role boundaries and output locations in AGENTS.md.
+  - Draft in outputs/; never present drafts as approved facts or decisions.
+  - Mark drafts with status headers (Draft | Review | Approved).
 EOF
   done
 
@@ -120,15 +135,22 @@ new_personal_brain() {
   cat > "$root/AGENTS.md" <<'EOF'
 # Personal Brain Guardrails
 
+## Boundary rules (critical)
+- **Directory boundary:** Only read and write within this brain directory (`~/Brains/personal/`). Never access files outside this directory.
+- **Cross-brain isolation:** Never read or write to company/project brains directly. Create routing notes to move material to appropriate brains.
+- **Raw immutability:** Treat `raw/` as immutable source material. Never overwrite or delete raw captures.
+- **Wiki protection:** Never write directly to `wiki/`. Promote from `outputs/` only after human review.
+- **Company separation:** Never mix company-specific facts into personal canonical knowledge. Keep company context in company brains.
+
 ## Role
 Capture, organize, and route information without mixing company-specific facts into personal canonical knowledge.
 
 ## Rules
 - Read INDEX.md before substantive work.
-- Put incoming material in raw/ and reviewed knowledge in wiki/.
+- Put incoming material in `raw/` and reviewed knowledge in `wiki/`.
 - Create a routing note when material belongs to a company or project brain.
 - Keep private, sensitive, or unverified information clearly labeled.
-- Draft in outputs/ and archive only completed work.
+- Draft in `outputs/` and archive only completed work.
 EOF
 
   cat > "$root/.profiles/personal.yaml" <<'EOF'
@@ -137,8 +159,18 @@ brain: ~/Brains/personal
 model: nvidia/llama-3.1-70b-instruct
 system_prompt: |
   You manage personal knowledge capture, triage, and routing.
-  Read AGENTS.md and INDEX.md before substantive work.
-  Preserve source context, distinguish drafts from approved knowledge, and route company/project work to its dedicated brain.
+  
+  ## Boundaries (critical)
+  - Only read and write within this brain directory. Never access files outside this directory.
+  - Never read or write to company/project brains directly. Create routing notes instead.
+  - Never write directly to wiki/. Promote from outputs/ only after human review.
+  - Never mix company-specific facts into personal canonical knowledge.
+  - Treat raw/ as immutable; never overwrite source captures.
+  
+  ## Operating rules
+  - Read AGENTS.md and INDEX.md before substantive work.
+  - Preserve source context, distinguish drafts from approved knowledge.
+  - Route company/project work via routing notes to dedicated brains.
 EOF
 
   info "Created $root"
@@ -158,13 +190,20 @@ new_project() {
   cat > "$root/AGENTS.md" <<EOF
 # ${name} Project Guardrails
 
+## Boundary rules (critical)
+- **Directory boundary:** Only read and write within this brain directory (\`$root/\`). Never access files outside this directory.
+- **Cross-brain isolation:** Never read or write to other company/project brains. Route via personal brain if cross-brain context is needed.
+- **Raw immutability:** Treat \`raw/\` as immutable source material. Never overwrite or delete raw captures.
+- **Wiki protection:** Never write directly to \`wiki/\`. Promote from \`outputs/\` only after human review.
+- **Scope boundary:** Keep all work within the agreed project scope. Escalate scope changes before proceeding.
+
 ## Role
 Plan, coordinate, and execute work toward the project outcome.
 
 ## Rules
 - Read INDEX.md before substantive work and keep work within project scope.
-- Store plans in plans/, risks and dependencies in risks/, and decisions in decisions/.
-- Put working drafts and deliverables in outputs/.
+- Store plans in \`plans/\`, risks and dependencies in \`risks/\`, and decisions in \`decisions/\`.
+- Put working drafts and deliverables in \`outputs/\`.
 - Escalate scope, timeline, budget, or ownership changes to the project sponsor.
 - Archive completed artifacts; do not silently overwrite source material.
 EOF
@@ -175,8 +214,18 @@ brain: ~/Brains/projects/${slug}
 model: nvidia/llama-3.1-70b-instruct
 system_prompt: |
   You coordinate ${name}.
-  Read AGENTS.md and INDEX.md before substantive work.
-  Keep work within the agreed scope, document decisions and risks, and escalate material changes to the project sponsor.
+  
+  ## Boundaries (critical)
+  - Only read and write within this brain directory. Never access files outside this directory.
+  - Never read or write to other company/project brains.
+  - Never write directly to wiki/. Promote from outputs/ only after human review.
+  - Treat raw/ as immutable; never overwrite source captures.
+  - Keep work within the agreed project scope.
+  
+  ## Operating rules
+  - Read AGENTS.md and INDEX.md before substantive work.
+  - Document decisions and risks in their respective directories.
+  - Escalate material changes (scope, timeline, budget, ownership) to the project sponsor.
 EOF
 
   info "Created $root"
