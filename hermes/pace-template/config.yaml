@@ -1,0 +1,22 @@
+# PACE: Primary, Alternative, Contingency, Emergency
+model:
+  provider: nvidia
+  default: nvidia/nemotron-3-super-120b-a12b
+fallback_providers:
+  - provider: nvidia
+    model: nvidia/nemotron-3-super-120b-a12b
+    credential_pool: primary
+  - provider: nvidia
+    model: nvidia/llama-3.3-70b-instruct
+    credential_pool: alternative
+  - provider: nvidia
+    model: nvidia/llama-3.1-8b-instruct
+    credential_pool: contingency
+  - provider: ollama
+    model: llama3.2:3b
+    base_url: http://127.0.0.1:11434/v1
+memory:
+  provider: local
+  max_chars: 2200
+skills:
+  auto_create: true
